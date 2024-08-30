@@ -15,3 +15,13 @@ class Movie(db.Model):
     movie_director = db.Column(db.String(100), nullable = False)
     release_year = db.Column(db.Integer, nullable = False)
     movie_rating = db.Column(db.Float, nullable = False)
+
+
+class UserMovie(db.Model):
+    __tablename__ = 'users_movies'
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), primary_key=True)
+    watchlist_status = db.Column(db.String(10))  # Example: 'watched', 'watching', 'wishlist'
+    user_rating = db.Column(db.Integer, nullable = True)
+    user = db.relationship('User', backref='user_movies')
+    movie = db.relationship('Movie', backref='user_movies')

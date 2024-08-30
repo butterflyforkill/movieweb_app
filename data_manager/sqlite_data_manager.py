@@ -8,13 +8,15 @@ class SQLiteDataManager(DataManagerInterface):
         self.db.create_all()
     
     def get_all_users(self):
-        pass
+        return self.db.session.query(User).all()
     
     def get_user_movies(self, user_id):
         pass
     
-    def add_user(user):
-        pass
+    def add_user(self, user):
+        user_data = User(**user)
+        self.db.session.add(user_data)
+        self.db.commit()
     
     def add_movie(movie):
         pass
