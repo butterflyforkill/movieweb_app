@@ -1,11 +1,13 @@
-from data_manager_interface import DataManagerInterface
-from flask_sqlalchemy import SQLAlchemy
-from data_models import Movie, User, UserMovie
+from data_manager.data_manager_interface import DataManagerInterface
+from data_manager.data_models import db, Movie, User, UserMovie
 
 class SQLiteDataManager(DataManagerInterface):
-    def __init__(self, db_file_name):
-        self.db = SQLAlchemy(db_file_name)
-        self.db.create_all()
+    def __init__(self, app):
+        self.app = app
+        self.db = db # sqlalchemy objecr from data_models
+        db.init_app(app) # inizialisation of the db_init
+        with app.app_context():
+            self.db.create_all() # create all the tables
     
     def get_all_movies(self):
         return self.db.session.query(Movie).all()
