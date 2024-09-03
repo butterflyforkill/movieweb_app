@@ -18,11 +18,13 @@ class SQLiteDataManager(DataManagerInterface):
         self.db.session.add(user_data)
         self.db.commit()
     
-    def add_movie(movie):
+    def add_movie(self, movie):
+        user_data = User(**movie)
+        self.db.session.add(user_data)
+        self.db.commit()
+    
+    def update_movie(self, movie):
         pass
     
-    def update_movie(movie):
-        pass
-    
-    def delete_movie(movie_id):
+    def delete_movie(self, movie_id):
         pass
