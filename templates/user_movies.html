@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Movies - MovieWeb App</title>
+</head>
+<body>
+    <h1>{{ user.username }}'s Movies</h1>
+    <ul>
+        {% for movie in user_movies %}
+            <li>
+                <a href="/movies/{{ movie.movie_id }}">{{ movie.movie_name }}</a>
+                <button class="edit-button">Edit</button>
+                <button class="delete-button">Delete</button>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

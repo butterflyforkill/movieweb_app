@@ -8,6 +8,7 @@
     <ul>
         {% for user in users %}
             <li><a href="/users/{{ user.id }}">{{ user.user_name }}</a></li>
+            <a href="/users/{{ user.id }}/add_movie">Add Movie</a>
         {% endfor %}
     </ul>
 </body>

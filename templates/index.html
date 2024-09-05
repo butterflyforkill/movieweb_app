@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>MovieWeb App</title>
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
     <h1>MovieWeb App</h1>
@@ -11,13 +12,14 @@
             <li><a href="/">Home</a></li>
             <li><a href="/users">Users</a></li>
             <li><a href="/add_user">Add User</a></li>
+            <li><a href="/add_movie">Add Movie</a></li>
         </ul>
     </nav>
 
     <h2>Featured Movies</h2>
-    <ul>
+    <ul class="movies">
         {% for movie in movies %}
-            <li><a href="/movies/{{ movie.id }}">{{ movie.movie_poster }}{{ movie.movie_name }}</a></li>
+            <li><a href="/movies/{{ movie.id }}"><img src="{{ movie.movie_poster }}" alt="Alternative text">{{ movie.movie_name }}</a></li>
         {% endfor %}
     </ul>
 </body>

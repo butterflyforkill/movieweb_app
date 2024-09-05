@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Movie - MovieWeb App</title>
+</head>
+<body>
+    <h1>Add Movie</h1>
+    <form method="POST" action="/users/<user_id>/add_movie">
+        <label for="movie_name">Movie Name:</label>
+        <input type="text" id="movie_name" name="movie_name" required><br><br>
+
+        <label for="watchlist_status">Watchlist Status:</label>
+        <select id="watchlist_status" name="watchlist_status" required>
+            <option value="watched">Watched</option>
+            <option value="watching">Watching</option>
+            <option value="wishlist">Wishlist</option>
+        </select><br><br>
+
+        <label for="user_rating">User Rating:</label>
+        <input type="number" id="user_rating" name="user_rating" min="1" max="5"><br><br>
+
+        <button type="submit">Add Movie</button>
+    </form>
+</body>
+</html>
