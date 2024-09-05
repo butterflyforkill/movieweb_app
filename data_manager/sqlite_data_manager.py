@@ -22,7 +22,7 @@ class SQLiteDataManager(DataManagerInterface):
     def add_user(self, user):
         user_data = User(**user)
         self.db.session.add(user_data)
-        self.db.commit()
+        self.db.session.commit()
     
     def add_movie(self, movie, user_id, watchlist_status, user_rating):
         movie_data = Movie(**movie)
@@ -31,14 +31,14 @@ class SQLiteDataManager(DataManagerInterface):
         movie_id = movie_data.id
         user_movie_data = UserMovie(user_id=user_id, movie_id=movie_id, watchlist_status=watchlist_status, user_rating=user_rating)
         self.db.session.add(user_movie_data)
-        self.db.commit()
+        self.db.session.commit()
     
     def update_movie(self, user_id, movie_id, rating, status):
         user_movie = self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first
         if user_movie:
             user_movie.watchlist_status = status
             user_movie.user_rating = rating
-            db.session.commit()
+            self.db.session.commit()
             return True  # Indicate success
         return False  # Indicate failure (movie not found)
     
@@ -46,6 +46,6 @@ class SQLiteDataManager(DataManagerInterface):
         movie_to_delete = self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first
         if movie_to_delete:
             self.db.session.delete(movie_to_delete)
-            self.db.commit()
+            self.db.session.commit()
             return True
         return False
