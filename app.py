@@ -1,12 +1,13 @@
 import os
 import requests
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from data_manager.sqlite_data_manager import SQLiteDataManager
 from config.config_files import APIkeys
 
 app = Flask(__name__)
 db_path = os.path.join(os.getcwd(), 'data', 'movie_app.sqlite')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+app.config['SECRET_KEY'] = "your secret key"
 data_manager = SQLiteDataManager(app)
 
 @app.route('/')
@@ -15,6 +16,11 @@ def home():
     return render_template('index.html', movies=movies)
 
 
+@app.route('/movies/<int:movie_id>')
+def movie_details(movie_id):
+    movie = data_manager.get_movie_by_id(movie_id)
+    return render_template('movie.html', movie=movie)
+
 @app.route('/users')
 def list_users():
     users = data_manager.get_all_users()
@@ -22,9 +28,9 @@ def list_users():
 
 
 @app.route('/users/<int:user_id>')
-def get_user_movies(user_id):
+def user_movies(user_id):
     user_movies = data_manager.get_user_movies(user_id)
-    return user_movies
+    return render_template('user_movies.html', user_movies=user_movies)
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
@@ -72,7 +78,7 @@ def response_parser(resp):
             return f"Error: {resp.status_code}"
 
 
-@app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
+@app.route('/users/<int:user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
     if request.method == 'POST':
         movie_name = request.form['movie_name']
@@ -91,12 +97,12 @@ def add_movie(user_id):
             year = year_str[0:4]
             print(rating)
             movie = {
-                
                 'movie_poster':parsed_resp['Poster'],
                 'movie_name': movie_name,
                 'movie_director':parsed_resp['Director'],
                 'release_year':year, 
-                'movie_rating':rating
+                'movie_rating':rating,
+                'movie_plot': parsed_resp['Plot']
                 }
 
             # Add the movie to the user's list

@@ -4,11 +4,12 @@
     <title>User Movies - MovieWeb App</title>
 </head>
 <body>
-    <h1>{{ user.username }}'s Movies</h1>
+    <h1>Movies</h1>
     <ul>
         {% for movie in user_movies %}
             <li>
-                <a href="/movies/{{ movie.movie_id }}">{{ movie.movie_name }}</a>
+                <img src="{{ movie.movie_poster }}" alt="Alternative text">
+                 {{ movie.movie_name }}
                 <button class="edit-button">Edit</button>
                 <button class="delete-button">Delete</button>
             </li>

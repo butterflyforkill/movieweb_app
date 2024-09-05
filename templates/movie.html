@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ movie.movie_name }} - MovieWeb App</title>
+</head>
+<body>
+    <h1>{{ movie.movie_name }}</h1>
+
+    <div class="movie-details">
+        <img src="{{ movie.movie_poster }}" alt="{{ movie.movie_name }}">
+        <p><strong>Release Year:</strong> {{ movie.release_year }}</p>
+        <p><strong>Director:</strong> {{ movie.movie_director }}</p>
+        <p><strong>Plot:</strong> {{ movie.movie_plot }}</p>
+    </div>
+</body>
+</html>

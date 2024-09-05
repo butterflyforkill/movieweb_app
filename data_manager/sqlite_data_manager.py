@@ -12,11 +12,20 @@ class SQLiteDataManager(DataManagerInterface):
     def get_all_movies(self):
         return self.db.session.query(Movie).all()
     
+    def get_movie_by_id(self, movie_id):
+        return self.db.session.query(Movie).filter(Movie.id == movie_id).first()
+    
+    def get_movie_by_name(self, movie_name):
+        return self.db.session.query(Movie).filter(self.db.func.lower(Movie.movie_name) == self.db.func.lower(movie_name)).first()
+    
+    def get_movie_by_movie_by_user(self, movie_id, user_id):
+        return self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first()
+    
     def get_all_users(self):
         return self.db.session.query(User).all()
     
     def get_user_movies(self, user_id):
-        return self.db.session.query(Movie.movie_name,UserMovie.watchlist_status, UserMovie.user_rating) \
+        return self.db.session.query(Movie.movie_name, Movie.movie_poster, UserMovie.watchlist_status, UserMovie.user_rating) \
         .join(UserMovie).filter(UserMovie.user_id == user_id).all()
     
     def add_user(self, user):
@@ -25,10 +34,22 @@ class SQLiteDataManager(DataManagerInterface):
         self.db.session.commit()
     
     def add_movie(self, movie, user_id, watchlist_status, user_rating):
+        existing_movie = self.db.session.query(Movie).filter_by(movie_name=movie['movie_name']).first()
         movie_data = Movie(**movie)
-        self.db.session.add(movie_data)
-        self.db.session.commit()
-        movie_id = movie_data.id
+
+        if existing_movie:
+            # Check if the user has already added this movie
+            existing_user_movie = self.db.session.query(UserMovie).filter_by(user_id=user_id, movie_id=existing_movie.id).first()
+            movie_id = existing_movie.id # if the movie alredy exists
+
+            if existing_user_movie:
+                # Movie already added by the user
+                return
+        else:
+            self.db.session.add(movie_data)
+            self.db.session.commit()
+            movie_id = movie_data.id # if the movie was added to the database
+
         user_movie_data = UserMovie(user_id=user_id, movie_id=movie_id, watchlist_status=watchlist_status, user_rating=user_rating)
         self.db.session.add(user_movie_data)
         self.db.session.commit()
