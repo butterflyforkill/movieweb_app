@@ -16,7 +16,8 @@ class SQLiteDataManager(DataManagerInterface):
         return self.db.session.query(Movie).filter(Movie.id == movie_id).first()
     
     def get_movie_by_name(self, movie_name):
-        return self.db.session.query(Movie).filter(self.db.func.lower(Movie.movie_name) == self.db.func.lower(movie_name)).first()
+        return self.db.session.query(Movie) \
+            .filter(self.db.func.lower(Movie.movie_name) == self.db.func.lower(movie_name)).first()
     
     def get_movie_by_movie_by_user(self, movie_id, user_id):
         return self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first()
@@ -25,8 +26,9 @@ class SQLiteDataManager(DataManagerInterface):
         return self.db.session.query(User).all()
     
     def get_user_movies(self, user_id):
-        return self.db.session.query(Movie.movie_name, Movie.movie_poster, UserMovie.watchlist_status, UserMovie.user_rating) \
-        .join(UserMovie).filter(UserMovie.user_id == user_id).all()
+        return self.db.session.query(UserMovie, Movie.movie_name, Movie.movie_poster) \
+            .filter(UserMovie.user_id == user_id) \
+            .join(Movie).all()
     
     def add_user(self, user):
         user_data = User(**user)
@@ -55,16 +57,28 @@ class SQLiteDataManager(DataManagerInterface):
         self.db.session.commit()
     
     def update_movie(self, user_id, movie_id, rating, status):
-        user_movie = self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first
-        if user_movie:
-            user_movie.watchlist_status = status
-            user_movie.user_rating = rating
-            self.db.session.commit()
-            return True  # Indicate success
-        return False  # Indicate failure (movie not found)
+        if not isinstance(rating, int) or int(rating) < 1 or int(rating) > 5:
+            raise ValueError("Invalid rating: Rating must be an integer between 1 and 5.")
+
+        if status not in ('watched', 'watching', 'wishlist'):
+            raise ValueError("Invalid status: Status must be 'watched', 'watching', or 'wishlist'.")
+
+        try:
+            user_movie = self.get_movie_by_movie_by_user(movie_id, user_id)
+            print(user_movie)
+            if user_movie:
+                user_movie.watchlist_status = status
+                user_movie.user_rating = rating
+                self.db.session.add(user_movie)
+                self.db.session.commit()
+                return True  # Indicate success
+            return False  # Indicate failure (movie not found)
+        except Exception as e:
+            # Handle exceptions gracefully
+            raise ValueError(f"Error updating movie: {str(e)}")
     
     def delete_movie(self, user_id, movie_id):
-        movie_to_delete = self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first
+        movie_to_delete = self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first()
         if movie_to_delete:
             self.db.session.delete(movie_to_delete)
             self.db.session.commit()

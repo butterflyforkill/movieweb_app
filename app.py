@@ -1,6 +1,6 @@
 import os
 import requests
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from data_manager.sqlite_data_manager import SQLiteDataManager
 from config.config_files import APIkeys
 
@@ -10,24 +10,24 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SECRET_KEY'] = "your secret key"
 data_manager = SQLiteDataManager(app)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def home():
     movies = data_manager.get_all_movies()
     return render_template('index.html', movies=movies)
 
 
-@app.route('/movies/<int:movie_id>')
+@app.route('/movies/<int:movie_id>', methods=['GET'])
 def movie_details(movie_id):
     movie = data_manager.get_movie_by_id(movie_id)
     return render_template('movie.html', movie=movie)
 
-@app.route('/users')
+@app.route('/users', methods=['GET'])
 def list_users():
     users = data_manager.get_all_users()
     return render_template('users.html', users=users)
 
 
-@app.route('/users/<int:user_id>')
+@app.route('/users/<int:user_id>',methods=['GET'])
 def user_movies(user_id):
     user_movies = data_manager.get_user_movies(user_id)
     return render_template('user_movies.html', user_movies=user_movies)
@@ -115,14 +115,44 @@ def add_movie(user_id):
     return render_template('add_movie.html')
 
 
-@app.route('/users/<user_id>/update_movie/<movie_id>')
+@app.route('/users/<int:user_id>/update_movie/<int:movie_id>', methods=['GET', 'POST'])
 def update_movie(user_id, movie_id):
-    pass
+    try:
+        user_movie = data_manager.get_movie_by_movie_by_user(user_id, movie_id)
+        if user_movie is None:
+            return "Movie not found or not in user's list.", 404
+
+        if request.method == 'POST':
+            # Extract the rating and status from the request data
+            rating = request.form['rating']
+            status = request.form['status']
+
+            # Update the movie using the data manager
+            if data_manager.update_movie(user_id, movie_id, rating, status):
+                return redirect(url_for('user_movies', user_id=user_id))
+            else:
+                return jsonify({'message': 'Movie not found or not in user\'s list'}), 404
+
+        # Render the HTML form for updating the movie
+        return render_template('update_movie.html', user_movie=user_movie)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
-@app.route('/users/<user_id>/delete_movie/<movie_id>')
+
+@app.route('/users/<int:user_id>/delete_movie/<int:movie_id>', methods = ['POST'])
 def delete_movie(user_id, movie_id):
-    pass
+    try:
+        if data_manager.delete_movie(user_id, movie_id):
+            flash('Movie deleted successfully', 'success')
+            return redirect(url_for('user_movies', user_id=user_id))
+        else:
+            flash('Movie not found or not associated with the user', 'error')
+            return redirect(url_for('user_movies', user_id=user_id))
+    except Exception as e:
+        # Handle exceptions gracefully
+        flash(f'An error occurred: {str(e)}', 'error')
+        return redirect(url_for('user_movies', user_id=user_id))
 
 
 if __name__ == '__main__':

@@ -5,13 +5,28 @@
 </head>
 <body>
     <h1>Movies</h1>
+    {% for message in get_flashed_messages() %}
+        {% if message.category == 'success' %}
+            <div class="flash-message success">
+                {{ message }}
+            </div>
+        {% elif message.category == 'error' %}
+            <div class="flash-message error">
+                {{ message }}
+            </div>
+        {% endif %}
+    {% endfor %}
     <ul>
-        {% for movie in user_movies %}
+        {% for user_movie, movie_name, movie_poster in user_movies %}
             <li>
-                <img src="{{ movie.movie_poster }}" alt="Alternative text">
-                 {{ movie.movie_name }}
-                <button class="edit-button">Edit</button>
-                <button class="delete-button">Delete</button>
+                <img src="{{ movie_poster }}" alt="Movie Poster">
+                {{ movie_name }}
+                <form action="/users/{{ user_movie.user_id }}/update_movie/{{  user_movie.movie_id }}" method="POST">
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="/users/{{ user_movie.user_id }}/delete_movie/{{  user_movie.movie_id }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
             </li>
         {% endfor %}
     </ul>

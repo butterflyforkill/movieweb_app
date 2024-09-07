@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Movie - MovieWeb App</title>
+</head>
+<body>
+    <h1>Update Movie</h1>
+    <form action="" method="POST">
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" name="rating" value="{{ user_movie.user_rating }}">
+        <br>
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="watched" {% if user_movie.watchlist_status == 'watched' %}selected{% endif %}>Watched</option>
+            <option value="watching" {% if user_movie.watchlist_status == 'watching' %}selected{% endif %}>Watching</option>
+            <option value="wishlist" {% if user_movie.watchlist_status == 'wishlist' %}selected{% endif %}>Wishlist</option>
+        </select>
+        <br>
+        <button type="submit">Update Movie</button>
+    </form>
+</body>
+</html>

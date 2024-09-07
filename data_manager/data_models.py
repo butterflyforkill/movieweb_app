@@ -27,3 +27,14 @@ class UserMovie(db.Model):
     user_rating = db.Column(db.Integer, nullable = True)
     user = db.relationship('User', backref='user_movies')
     movie = db.relationship('Movie', backref='user_movies')
+    
+    def __str__(self):
+        """Returns a human-readable representation of a UserMovie object.
+
+        Includes user ID, movie ID, watchlist status (if set), and user rating (if set).
+        """
+
+        status_string = f" (watchlist status: {self.watchlist_status})" if self.watchlist_status else ""
+        rating_string = f" (rating: {self.user_rating})" if self.user_rating else ""
+
+        return f"UserMovie(user_id={self.user_id}, movie_id={self.movie_id}{status_string}{rating_string})"
