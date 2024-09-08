@@ -3,6 +3,7 @@ import requests
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from data_manager.sqlite_data_manager import SQLiteDataManager
 from config.config_files import APIkeys
+from utils.errors import NotFoundError
 
 app = Flask(__name__)
 db_path = os.path.join(os.getcwd(), 'data', 'movie_app.sqlite')
