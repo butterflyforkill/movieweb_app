@@ -1,3 +1,5 @@
+from flask import flash, render_template
+
 class CustomError(Exception):
     """Base class for custom errors."""
 
@@ -38,3 +40,11 @@ class InternalServerError(CustomError):
 
     def __init__(self, message="Internal server error"):
         super().__init__(message, 500)
+
+
+def handle_internal_server_error(app, e):
+    """Handles internal server errors."""
+    app.logger.error(f"Internal Server Error: {str(e)}")
+    flash("An unexpected error occurred. Please try again later.", "error")
+    return render_template('error.html', error_message="Internal Server Error")
+        

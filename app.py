@@ -3,7 +3,7 @@ import requests
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from data_manager.sqlite_data_manager import SQLiteDataManager
 from config.config_files import APIkeys
-from utils.errors import NotFoundError
+from utils.errors import NotFoundError, InternalServerError, handle_internal_server_error
 
 app = Flask(__name__)
 db_path = os.path.join(os.getcwd(), 'data', 'movie_app.sqlite')
@@ -13,25 +13,44 @@ data_manager = SQLiteDataManager(app)
 
 @app.route('/', methods=['GET'])
 def home():
-    movies = data_manager.get_all_movies()
-    return render_template('index.html', movies=movies)
+    try:
+        movies = data_manager.get_all_movies()
+        return render_template('index.html', movies=movies)
+    except Exception as e:
+        flash(f'An error occurred while retrieving movies: {str(e)}', 'error')
+        return render_template('index.html', movies=[])
 
 
 @app.route('/movies/<int:movie_id>', methods=['GET'])
 def movie_details(movie_id):
-    movie = data_manager.get_movie_by_id(movie_id)
-    return render_template('movie.html', movie=movie)
+    try:
+        movie = data_manager.get_movie_by_id(movie_id)
+        if movie is None:
+            raise NotFoundError(f"Movie with ID {movie_id} not found")
+        return render_template('movie.html', movie=movie)
+    except NotFoundError as e:
+        flash(str(e), 'error')
+        return redirect(url_for('home'))
+    except Exception as e:
+        return handle_internal_server_error(app, e)
+
 
 @app.route('/users', methods=['GET'])
 def list_users():
-    users = data_manager.get_all_users()
-    return render_template('users.html', users=users)
+    try:
+        users = data_manager.get_all_users()
+        return render_template('users.html', users=users)
+    except Exception as e:
+        return handle_internal_server_error(e)
 
 
 @app.route('/users/<int:user_id>',methods=['GET'])
 def user_movies(user_id):
-    user_movies = data_manager.get_user_movies(user_id)
-    return render_template('user_movies.html', user_movies=user_movies)
+    try:
+        user_movies = data_manager.get_user_movies(user_id)
+        return render_template('user_movies.html', user_movies=user_movies)
+    except Exception as e:
+        return handle_internal_server_error(e)
 
 
 @app.route('/add_user', methods=['GET', 'POST'])
@@ -43,10 +62,11 @@ def add_user():
         user = {'user_name': username}
 
         # Add the user to the database
-        data_manager.add_user(user)
-
-        # Redirect to the users page or display a success message
-        return redirect('/users', code=302)
+        try:
+            data_manager.add_user(user)
+            return redirect('/users', code=302)
+        except Exception as e:
+            return handle_internal_server_error(e)
 
     return render_template('add_user.html')
 
@@ -86,31 +106,45 @@ def add_movie(user_id):
         watchlist_status = request.form['watchlist_status']
         user_rating = request.form.get('user_rating')
         api_url = f'http://www.omdbapi.com/?apikey={APIkeys.APIkey}&t={movie_name}'
-        response = requests.get(api_url)
-        parsed_resp = response_parser(response)
-        if parsed_resp == 'Error: Movie not found!':
-            print(f"The movie {movie_name} doesn't exist")
-        elif type(parsed_resp) == str:
-            print(parsed_resp)
-        else:
-            rating = float(parsed_resp['Ratings'][0]['Value'].split('/')[0])
-            year_str = parsed_resp['Year'] 
-            year = year_str[0:4]
-            print(rating)
-            movie = {
-                'movie_poster':parsed_resp['Poster'],
-                'movie_name': movie_name,
-                'movie_director':parsed_resp['Director'],
-                'release_year':year, 
-                'movie_rating':rating,
-                'movie_plot': parsed_resp['Plot']
-                }
 
-            # Add the movie to the user's list
-            data_manager.add_movie(movie, user_id, watchlist_status, user_rating)
+        try:
+            response = requests.get(api_url)
+            parsed_resp = response_parser(response)
 
-        # Redirect to the user's movies page or display a success message
-        return redirect(url_for('user_movies', user_id=user_id))
+            if parsed_resp == 'Error: Movie not found!':
+                flash(f"The movie {movie_name} doesn't exist", 'warning')
+            elif type(parsed_resp) == str:
+                flash(parsed_resp, 'error')
+            else:
+                try:
+                    rating = float(parsed_resp['Ratings'][0]['Value'].split('/')[0])
+                    year_str = parsed_resp['Year']
+                    year = year_str[0:4]
+
+                    movie = {
+                        'movie_poster': parsed_resp['Poster'],
+                        'movie_name': movie_name,
+                        'movie_director': parsed_resp['Director'],
+                        'release_year': year,
+                        'movie_rating': rating,
+                        'movie_plot': parsed_resp['Plot']
+                    }
+
+                    # Add the movie to the user's list (handle potential data errors)
+                    try:
+                        data_manager.add_movie(movie, user_id, watchlist_status, user_rating)
+                        return redirect(url_for('user_movies', user_id=user_id))
+                    except Exception as e:
+                        flash(f"An error occurred while adding the movie: {str(e)}", 'error')
+                        return render_template('add_movie.html')
+
+                except (ValueError, KeyError) as e:
+                    flash(f"Invalid data in API response: {str(e)}", 'error')
+                    return render_template('add_movie.html')
+
+        except requests.exceptions.RequestException as e:
+            # Handle any errors during the API request
+            return handle_internal_server_error(e)
 
     # Render the form for GET requests
     return render_template('add_movie.html')
@@ -121,23 +155,30 @@ def update_movie(user_id, movie_id):
     try:
         user_movie = data_manager.get_movie_by_movie_by_user(movie_id, user_id)
         if user_movie is None:
-            return "Movie not found or not in user's list.", 404
+            raise NotFoundError("Movie not found or not in user's list")
 
         if request.method == 'POST':
             # Extract the rating and status from the request data
-            rating = int(request.form.get('rating'))
-            status = request.form.get('status')
+            try:
+                rating = int(request.form.get('rating'))
+                status = request.form.get('status')
 
-            # Update the movie using the data manager
-            if data_manager.update_movie(user_id, movie_id, rating, status):
-                return redirect(url_for('user_movies', user_id=user_id))
-            else:
-                return jsonify({'message': 'Movie not found or not in user\'s list'}), 404
+                # Update the movie using the data manager
+                if data_manager.update_movie(user_id, movie_id, rating, status):
+                    return redirect(url_for('user_movies', user_id=user_id))
+                else:
+                    raise NotFoundError("Movie not found or not in user's list")  # Use custom error
+            except ValueError:
+                flash("Invalid rating. Please enter a valid integer.", "error")
+                return render_template('update_movie.html', user_movie=user_movie)
 
         # Render the HTML form for updating the movie
         return render_template('update_movie.html', user_movie=user_movie)
+    except NotFoundError as e:
+        flash(str(e), 'error')
+        return redirect(url_for('user_movies', user_id=user_id))
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return handle_internal_server_error(e)  # Handle unexpected errors
 
 
 @app.route('/users/<int:user_id>/delete_movie/<int:movie_id>', methods = ['POST'])
@@ -147,12 +188,12 @@ def delete_movie(user_id, movie_id):
             flash('Movie deleted successfully', 'success')
             return redirect(url_for('user_movies', user_id=user_id))
         else:
-            flash('Movie not found or not associated with the user', 'error')
-            return redirect(url_for('user_movies', user_id=user_id))
-    except Exception as e:
-        # Handle exceptions gracefully
-        flash(f'An error occurred: {str(e)}', 'error')
+            raise NotFoundError("Movie not found or not associated with the user")
+    except NotFoundError as e:
+        flash(str(e), 'error')
         return redirect(url_for('user_movies', user_id=user_id))
+    except Exception as e:
+        return handle_internal_server_error(e)
 
 
 if __name__ == '__main__':
