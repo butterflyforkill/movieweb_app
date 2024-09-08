@@ -21,7 +21,7 @@ class SQLiteDataManager(DataManagerInterface):
     
     def get_movie_by_movie_by_user(self, movie_id, user_id):
         return self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first()
-    
+
     def get_all_users(self):
         return self.db.session.query(User).all()
     
@@ -57,7 +57,7 @@ class SQLiteDataManager(DataManagerInterface):
         self.db.session.commit()
     
     def update_movie(self, user_id, movie_id, rating, status):
-        if not isinstance(rating, int) or int(rating) < 1 or int(rating) > 5:
+        if not isinstance(rating, int) or int(rating) <= 1 or int(rating) >= 5:
             raise ValueError("Invalid rating: Rating must be an integer between 1 and 5.")
 
         if status not in ('watched', 'watching', 'wishlist'):
@@ -69,7 +69,6 @@ class SQLiteDataManager(DataManagerInterface):
             if user_movie:
                 user_movie.watchlist_status = status
                 user_movie.user_rating = rating
-                self.db.session.add(user_movie)
                 self.db.session.commit()
                 return True  # Indicate success
             return False  # Indicate failure (movie not found)

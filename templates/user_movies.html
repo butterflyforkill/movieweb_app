@@ -21,7 +21,7 @@
             <li>
                 <img src="{{ movie_poster }}" alt="Movie Poster">
                 {{ movie_name }}
-                <form action="/users/{{ user_movie.user_id }}/update_movie/{{  user_movie.movie_id }}" method="POST">
+                <form action="/users/{{ user_movie.user_id }}/update_movie/{{  user_movie.movie_id }}" method="GET">
                     <button type="submit">Edit</button>
                 </form>
                 <form action="/users/{{ user_movie.user_id }}/delete_movie/{{  user_movie.movie_id }}" method="POST">

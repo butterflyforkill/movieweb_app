@@ -118,14 +118,14 @@ def add_movie(user_id):
 @app.route('/users/<int:user_id>/update_movie/<int:movie_id>', methods=['GET', 'POST'])
 def update_movie(user_id, movie_id):
     try:
-        user_movie = data_manager.get_movie_by_movie_by_user(user_id, movie_id)
+        user_movie = data_manager.get_movie_by_movie_by_user(movie_id, user_id)
         if user_movie is None:
             return "Movie not found or not in user's list.", 404
 
         if request.method == 'POST':
             # Extract the rating and status from the request data
-            rating = request.form['rating']
-            status = request.form['status']
+            rating = int(request.form.get('rating'))
+            status = request.form.get('status')
 
             # Update the movie using the data manager
             if data_manager.update_movie(user_id, movie_id, rating, status):
@@ -137,7 +137,6 @@ def update_movie(user_id, movie_id):
         return render_template('update_movie.html', user_movie=user_movie)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 
 @app.route('/users/<int:user_id>/delete_movie/<int:movie_id>', methods = ['POST'])
