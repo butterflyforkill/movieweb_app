@@ -4,7 +4,17 @@
     <title>Update Movie - MovieWeb App</title>
 </head>
 <body>
-    <h1>Update Movie</h1>
+
+    <h1>MovieWeb App</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/add_user">Add User</a></li>
+        </ul>
+    </nav>
+    <h2>Update Movie</h2>
     <form method="POST">
         <label for="rating">Rating:</label>
         <input type="number" id="rating" name="rating" value="{{ user_movie.user_rating }}">

@@ -4,7 +4,19 @@
     <title>User Movies - MovieWeb App</title>
 </head>
 <body>
-    <h1>Movies</h1>
+
+    <h1>MovieWeb App</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/add_user">Add User</a></li>
+        </ul>
+    </nav>
+
+    <h2>List of the user's Movies</h2>
+    
     {% for message in get_flashed_messages() %}
         {% if message.category == 'success' %}
             <div class="flash-message success">
@@ -18,9 +30,11 @@
     {% endfor %}
     <ul>
         {% for user_movie, movie_name, movie_poster in user_movies %}
+        
             <li>
                 <img src="{{ movie_poster }}" alt="Movie Poster">
-                {{ movie_name }}
+                <a href="/movies/{{ user_movie.movie_id}}"> {{ movie_name }} </a>
+               
                 <form action="/users/{{ user_movie.user_id }}/update_movie/{{  user_movie.movie_id }}" method="GET">
                     <button type="submit">Edit</button>
                 </form>
