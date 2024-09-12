@@ -1,0 +1,185 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url("./anime-style-clouds.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+}
+  
+nav {
+    background-color: rgba(255, 255, 255, 0.8);  /* White background for navigation */
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Light gray border */
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    color: #270808; /* Dark gray for heading */
+    border-bottom: 2px solid #ee90d2; /* Green border */
+    font-size: 28px; /* Adjust font size as needed */
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.5); /* Light gray background with 80% opacity */
+    border-radius: 5px;
+  }
+  
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+  
+nav li {
+    display: inline-block;
+}
+  
+nav a {
+    text-decoration: none;
+    color: #333; /* Dark gray for navigation links */
+    padding: 10px;
+}
+  
+nav a:hover {
+    background-color: #eee; /* Lighter gray on hover */
+}
+
+h2 {
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    color: #270808; /* Dark gray for heading */
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.5); /* Light gray background with 80% opacity */
+    border-radius: 5px;
+}
+
+.movie-list {
+    margin-top: 20px;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.5); 
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+}
+
+.movie-grid li {
+    list-style: none;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.movie-grid img {
+    width: 100%;
+    height: auto;
+}
+
+.movie-grid .movie-name {
+    font-weight: bold;
+}
+
+.movie-grid .user-rating {
+    color: #888;
+    font-size: 12px;
+}
+
+
+.filter-container label {
+    margin-right: 10px;
+}
+
+.filter-container select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.filter-container button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.movie-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.5); 
+}
+
+.movie-details {
+    padding: 10px;
+}
+
+.movie-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.movie-rating {
+    color: #2c4a48;
+    font-size: 18px;
+}
+
+.movie-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.edit-button, .delete-button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.edit-button {
+    background-color: #4caf50; /* Green for edit */
+}
+
+.delete-button {
+    background-color: #f44336; /* Red for delete */
+}
+
+.flash-messages {
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.5); 
+}
+
+.flash-message {
+    padding: 10px;
+}
+
+.flash-success {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.flash-error {
+    background-color: #f44336;
+    color: #fff;
+}

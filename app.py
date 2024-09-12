@@ -21,7 +21,7 @@ def home():
         return render_template('index.html', movies=[])
 
 
-@app.route('/movies/<int:movie_id>', methods=['GET'])
+@app.route('/<int:movie_id>', methods=['GET'])
 def movie_details(movie_id):
     try:
         movie = data_manager.get_movie_by_id(movie_id)
@@ -134,7 +134,11 @@ def add_movie(user_id):
                 flash(parsed_resp, 'error')
             else:
                 try:
-                    rating = float(parsed_resp['Ratings'][0]['Value'].split('/')[0])
+                    rating = 0
+                    if parsed_resp['Ratings'] == []:
+                        reting = 0.0
+                    else:
+                        rating = float(parsed_resp['Ratings'][0]['Value'].split('/')[0])
                     year_str = parsed_resp['Year']
                     year = year_str[0:4]
 

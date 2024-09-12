@@ -2,11 +2,13 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0; /* Light gray background */
+    background-image: url("./anime-style-clouds.jpg");
+    background-size: cover;
+    background-attachment: fixed;
 }
   
 nav {
-    background-color: #fff; /* White background for navigation */
+    background-color: rgba(255, 255, 255, 0.8);  /* White background for navigation */
     padding: 10px;
     border-bottom: 1px solid #ddd; /* Light gray border */
 }
@@ -15,8 +17,12 @@ h1 {
     text-align: center;
     padding: 20px 0;
     margin: 0;
-    color: #333; /* Dark gray for heading */
-    border-bottom: 2px solid #90EE90; /* Green border */
+    color: #270808; /* Dark gray for heading */
+    border-bottom: 2px solid #ee90d2; /* Green border */
+    font-size: 28px; /* Adjust font size as needed */
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.5); /* Light gray background with 80% opacity */
+    border-radius: 5px;
   }
   
 nav ul {

@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>{{ movie.movie_name }} - MovieWeb App</title>
+    <link rel="stylesheet" href="static/movie_styles.css">
 </head>
 <body>
 
@@ -17,11 +18,15 @@
 
     <h2>{{ movie.movie_name }}</h2>
 
-    <div class="movie-details">
+    <div class="movie-container">
+    <div class="movie-poster">
         <img src="{{ movie.movie_poster }}" alt="{{ movie.movie_name }}">
+    </div>
+    <div class="movie-details">
         <p><strong>Release Year:</strong> {{ movie.release_year }}</p>
         <p><strong>Director:</strong> {{ movie.movie_director }}</p>
         <p><strong>Plot:</strong> {{ movie.movie_plot }}</p>
     </div>
+</div>
 </body>
 </html>

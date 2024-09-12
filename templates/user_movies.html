@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>User Movies - MovieWeb App</title>
+    <link rel="stylesheet" href="/static/user_movies_styles.css">
 </head>
 <body>
 
@@ -19,14 +20,16 @@
     
  
     <form action="/users/{{ user_movies[0][0].user_id }}/sort" method="POST">
-        <label for="watch_status">Filter by Watch Status:</label>
-        <select name="watch_status" id="watch_status">
-            <option value="">All</option>
-            <option value="watched">Watched</option>
-            <option value="watching">Watching</option>
-            <option value="wishlist">Wishlist</option>
-        </select>
-        <button type="submit">Filter</button>
+        <div class="filter-container">
+            <label for="watch_status">Filter by Watch Status:</label>
+            <select name="watch_status" id="watch_status" class="filter-select">
+                <option value="">All</option>
+                <option value="watched">Watched</option>
+                <option value="watching">Watching</option>
+                <option value="wishlist">Wishlist</option>
+            </select>
+            <button type="submit" class="filter-button">Filter</button>
+        </div>
     </form>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -37,20 +40,20 @@
         </ul>
       {% endif %}
     {% endwith %}
-    <ul>
+    <ul class="movie-list">
         {% for user_movie, movie_name, movie_poster in user_movies %}
-        
-            <li>
-                <img src="{{ movie_poster }}" alt="Movie Poster">
-                <a href="/movies/{{ user_movie.movie_id}}"> {{ movie_name }} </a>
-                <p>User rating: {{user_movie.user_rating}}</p>
-               
-                <form action="/users/{{ user_movie.user_id }}/update_movie/{{  user_movie.movie_id }}" method="GET">
-                    <button type="submit">Edit</button>
-                </form>
-                <form action="/users/{{ user_movie.user_id }}/delete_movie/{{  user_movie.movie_id }}" method="POST">
-                    <button type="submit">Delete</button>
-                </form>
+            <li class="movie-item">
+                <div class="movie-card">
+                    <img src="{{ movie_poster }}" alt="{{ movie_name }}">
+                    <div class="movie-details">
+                        <h3 class="movie-title">{{ movie_name }}</h3>
+                        <p class="movie-rating">User Rating: {{ user_movie.user_rating }}</p>
+                        <div class="movie-actions">
+                            <button class="edit-button">Edit</button>
+                            <button class="delete-button">Delete</button>
+                        </div>
+                    </div>
+                </div>
             </li>
         {% endfor %}
     </ul>

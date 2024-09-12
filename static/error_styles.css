@@ -53,37 +53,3 @@ body {
   nav a:hover {
     background-color: #eee; /* Lighter gray on hover */
   }
-  
-  .movies {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap; /* Allow movies to wrap to next line */
-    justify-content: space-around; /* Distribute movies evenly */
-  }
-  
-  .movies li {
-    display: flex; /* Enable Flexbox layout */
-    flex-direction: column; /* Arrange elements vertically */
-    align-items: center; /* Center elements horizontally (optional) */
-    padding: 10px;
-    margin: 5px; /* Add some spacing between movies */
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 5px; /* Rounded corners */
-    text-align: center; /* Center text within movie item */
-    width: 350px; /* Set a fixed width for each movie */
-    background-color: rgba(255, 255, 255, 0.8); 
-  }
-  
-  .movie-poster {
-    width: 100%; /* Fill the entire width of the movie item */
-    height: 150px; /* Set the height of the poster */
-    object-fit: cover; /* Ensure poster fills the space while maintaining aspect ratio */
-  }
-
-  .movie-info {
-    text-align: center; /* Center the movie name */
-    margin-top: 5px; /* Add a small margin for spacing */
-    color: #666; /* Adjust text color as needed */
-}

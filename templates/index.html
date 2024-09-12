@@ -14,16 +14,15 @@
             <li><a href="/add_user">Add User</a></li>
         </ul>
     </nav>
-
-    <h2>Featured Movies</h2>
+<br><br>
     <ul class="movies">
         {% for movie in movies %}
         <li>
-            <a href="/movies/{{ movie.id }}">
+            <a href="/{{ movie.id }}">
                 <img src="{{ movie.movie_poster }}" alt="Alternative text">
             </a>
             <div class="movie-info">
-                <a href="/movies/{{ movie.id }}">{{ movie.movie_name }}</a>
+                <a href="/{{ movie.id }}">{{ movie.movie_name }}</a>
             </div>
         </li>
         {% endfor %}
