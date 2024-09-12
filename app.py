@@ -13,6 +13,12 @@ data_manager = SQLiteDataManager(app)
 
 @app.route('/', methods=['GET'])
 def home():
+    """
+    Handles the home page request.
+
+    Returns:
+        The rendered index.html template with a list of all movies.
+    """
     try:
         movies = data_manager.get_all_movies()
         return render_template('index.html', movies=movies)
@@ -23,6 +29,16 @@ def home():
 
 @app.route('/<int:movie_id>', methods=['GET'])
 def movie_details(movie_id):
+    """
+    Handles requests for individual movie details.
+
+    Args:
+        movie_id (int): The ID of the movie to retrieve.
+
+    Returns:
+        The rendered movie.html template with the movie details.
+        Raises a NotFoundError if the movie is not found.
+    """
     try:
         movie = data_manager.get_movie_by_id(movie_id)
         if movie is None:
@@ -37,6 +53,12 @@ def movie_details(movie_id):
 
 @app.route('/users', methods=['GET'])
 def list_users():
+    """
+    Handles requests for a list of all users.
+
+    Returns:
+        The rendered users.html template with a list of users.
+    """
     try:
         users = data_manager.get_all_users()
         return render_template('users.html', users=users)
@@ -46,6 +68,15 @@ def list_users():
 
 @app.route('/users/<int:user_id>',methods=['GET'])
 def user_movies(user_id):
+    """
+    Handles requests for a user's movies.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        The rendered user_movies.html template with the user's movies.
+    """
     try:
         user_movies = data_manager.get_user_movies(user_id)
         return render_template('user_movies.html', user_movies=user_movies)
@@ -55,6 +86,15 @@ def user_movies(user_id):
 
 @app.route('/users/<int:user_id>/sort', methods=['POST'])
 def movies_sort(user_id):
+    """
+    Handles requests for sorting a user's movies based on watch status.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        The rendered user_movies.html template with the sorted movies.
+    """
     try:
         watch_status = request.form.get('watch_status')
         if watch_status:
@@ -72,6 +112,14 @@ def movies_sort(user_id):
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
+    """
+    Handles requests for adding a new user.
+
+    Returns:
+        The rendered add_user.html template if the request is a GET.
+        Redirects to the users page if the request 
+        is a POST and the user is successfully added.
+    """
     if request.method == 'POST':
         username = request.form['username']
 
@@ -89,35 +137,46 @@ def add_user():
 
 
 def response_parser(resp):
-        """
-        Parses the response from an HTTP request and
-        returns the appropriate data or error message.
+    """
+    Parses the response from an HTTP request and
+    returns the appropriate data or error message.
 
-        Args:
-        resp (requests.Response): The response object
-            from the HTTP request.
+    Args:
+    resp (requests.Response): The response object
+        from the HTTP request.
 
-        Returns:
-        dict or str: If the response status code is OK
-                    and the JSON response indicates success,
-                    returns the JSON data.
-                    If the JSON response indicates failure,
-                    returns an error message.
-                    If the response status code is not OK,
-                    returns an error message with the status code.
-        """
-        if resp.status_code == requests.codes.ok:
-            if resp.json()['Response'] == 'False':
-                error_resp = resp.json()
-                return f"Error: {error_resp['Error']}"
-            else:
-                return resp.json()
+    Returns:
+    dict or str: If the response status code is OK
+                and the JSON response indicates success,
+                returns the JSON data.
+                If the JSON response indicates failure,
+                returns an error message.
+                If the response status code is not OK,
+                returns an error message with the status code.
+    """
+    if resp.status_code == requests.codes.ok:
+        if resp.json()['Response'] == 'False':
+            error_resp = resp.json()
+            return f"Error: {error_resp['Error']}"
         else:
-            return f"Error: {resp.status_code}"
+            return resp.json()
+    else:
+        return f"Error: {resp.status_code}"
 
 
 @app.route('/users/<int:user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
+    """
+    Handles requests for adding a new movie to a user's list.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        The rendered add_movie.html template for GET requests.
+        Redirects to the user_movies page if the request 
+        is a POST and the movie is successfully added.
+    """
     if request.method == 'POST':
         movie_name = request.form['movie_name']
         watchlist_status = request.form['watchlist_status']
@@ -173,6 +232,19 @@ def add_movie(user_id):
 
 @app.route('/users/<int:user_id>/update_movie/<int:movie_id>', methods=['GET', 'POST'])
 def update_movie(user_id, movie_id):
+    """
+    Handles requests for updating a movie in a user's list.
+
+    Args:
+        user_id (int): The ID of the user.
+        movie_id (int): The ID of the movie to update.
+
+    Returns:
+        The rendered update_movie.html template for GET 
+        requests with pre-filled user movie data.
+        Redirects to the user_movies page if the request 
+        is a POST and the movie is successfully updated.
+    """
     try:
         user_movie = data_manager.get_movie_by_movie_by_user(movie_id, user_id)
         if user_movie is None:
@@ -188,7 +260,8 @@ def update_movie(user_id, movie_id):
                 if data_manager.update_movie(user_id, movie_id, rating, status):
                     return redirect(url_for('user_movies', user_id=user_id))
                 else:
-                    raise NotFoundError("Movie not found or not in user's list")  # Use custom error
+                    # Use custom error
+                    raise NotFoundError("Movie not found or not in user's list")
             except ValueError:
                 flash("Invalid rating. Please enter a valid integer.", "error")
                 return render_template('update_movie.html', user_movie=user_movie)
@@ -204,6 +277,17 @@ def update_movie(user_id, movie_id):
 
 @app.route('/users/<int:user_id>/delete_movie/<int:movie_id>', methods = ['POST'])
 def delete_movie(user_id, movie_id):
+    """
+    Deletes a movie from a user's list.
+
+    Args:
+        user_id (int): The ID of the user.
+        movie_id (int): The ID of the movie.
+
+    Returns:
+        Redirect to the user's movie list if successful, 
+        or to the user's movie list with an error message if unsuccessful.
+    """
     try:
         if data_manager.delete_movie(user_id, movie_id):
             flash('Movie deleted successfully', 'success')
