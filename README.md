@@ -1,6 +1,11 @@
 # Project Title
 Movieweb App: A Platform for Exploring and Managing Your Movie Collection
 
+<img width="1433" alt="Screenshot 2024-09-12 at 23 15 39" src="https://github.com/user-attachments/assets/da1bb741-ff53-4464-8d70-c671d61e15f9">
+
+<img width="1440" alt="Screenshot 2024-09-12 at 23 15 53" src="https://github.com/user-attachments/assets/193dc2f5-09fb-442d-bafb-6d135fb619f5">
+
+
 ## Description
 Movieweb App is a user-friendly web application that allows you to:
 
