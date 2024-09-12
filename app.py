@@ -41,7 +41,7 @@ def list_users():
         users = data_manager.get_all_users()
         return render_template('users.html', users=users)
     except Exception as e:
-        return handle_internal_server_error(e)
+        return handle_internal_server_error(app, e)
 
 
 @app.route('/users/<int:user_id>',methods=['GET'])
@@ -50,7 +50,7 @@ def user_movies(user_id):
         user_movies = data_manager.get_user_movies(user_id)
         return render_template('user_movies.html', user_movies=user_movies)
     except Exception as e:
-        return handle_internal_server_error(e)
+        return handle_internal_server_error(app, e)
 
 
 @app.route('/users/<int:user_id>/sort', methods=['POST'])
@@ -83,7 +83,7 @@ def add_user():
             data_manager.add_user(user)
             return redirect('/users', code=302)
         except Exception as e:
-            return handle_internal_server_error(e)
+            return handle_internal_server_error(app, e)
 
     return render_template('add_user.html')
 
@@ -161,7 +161,7 @@ def add_movie(user_id):
 
         except requests.exceptions.RequestException as e:
             # Handle any errors during the API request
-            return handle_internal_server_error(e)
+            return handle_internal_server_error(app, e)
 
     # Render the form for GET requests
     return render_template('add_movie.html')
@@ -195,7 +195,7 @@ def update_movie(user_id, movie_id):
         flash(str(e), 'error')
         return redirect(url_for('user_movies', user_id=user_id))
     except Exception as e:
-        return handle_internal_server_error(e)  # Handle unexpected errors
+        return handle_internal_server_error(app, e)  # Handle unexpected errors
 
 
 @app.route('/users/<int:user_id>/delete_movie/<int:movie_id>', methods = ['POST'])
@@ -210,7 +210,7 @@ def delete_movie(user_id, movie_id):
         flash(str(e), 'error')
         return redirect(url_for('user_movies', user_id=user_id))
     except Exception as e:
-        return handle_internal_server_error(e)
+        return handle_internal_server_error(app, e)
 
 
 if __name__ == '__main__':

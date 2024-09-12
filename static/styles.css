@@ -58,12 +58,15 @@ body {
   }
   
   .movies li {
+    display: flex; /* Enable Flexbox layout */
+    flex-direction: column; /* Arrange elements vertically */
+    align-items: center; /* Center elements horizontally (optional) */
     padding: 10px;
     margin: 5px; /* Add some spacing between movies */
     border: 1px solid #ddd; /* Light gray border */
     border-radius: 5px; /* Rounded corners */
     text-align: center; /* Center text within movie item */
-    width: 200px; /* Set a fixed width for each movie */
+    width: 350px; /* Set a fixed width for each movie */
   }
   
   .movie-poster {
@@ -71,3 +74,9 @@ body {
     height: 150px; /* Set the height of the poster */
     object-fit: cover; /* Ensure poster fills the space while maintaining aspect ratio */
   }
+
+  .movie-info {
+    text-align: center; /* Center the movie name */
+    margin-top: 5px; /* Add a small margin for spacing */
+    color: #666; /* Adjust text color as needed */
+}

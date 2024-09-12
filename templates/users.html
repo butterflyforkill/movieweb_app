@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Users - MovieWeb App</title>
+    <link rel="stylesheet" href="static/users_styles.css">
 </head>
 <body>
     <h1>MovieWeb App</h1>
@@ -14,12 +15,17 @@
         </ul>
     </nav>
     <h2>Users</h2>
-    <ul>
+    <div class="users_container">
+    <ul class="users">
         {% for user in users %}
-            <li><a href="/users/{{ user.id }}">{{ user.user_name }}</a></li>
+            <li><a href="/users/{{ user.id }}"><div class="user-name">{{ user.user_name }}</div></a>
+        <div class="user-actions">
             <a href="/users/{{ user.id }}">View Movies</a>
             <a href="/users/{{ user.id }}/add_movie">Add Movie</a>
+        </div>
+        </li>
         {% endfor %}
     </ul>
+</div>
 </body>
 </html> 

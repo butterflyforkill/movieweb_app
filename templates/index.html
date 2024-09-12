@@ -18,7 +18,14 @@
     <h2>Featured Movies</h2>
     <ul class="movies">
         {% for movie in movies %}
-            <li><a href="/movies/{{ movie.id }}"><img src="{{ movie.movie_poster }}" alt="Alternative text">{{ movie.movie_name }}</a></li>
+        <li>
+            <a href="/movies/{{ movie.id }}">
+                <img src="{{ movie.movie_poster }}" alt="Alternative text">
+            </a>
+            <div class="movie-info">
+                <a href="/movies/{{ movie.id }}">{{ movie.movie_name }}</a>
+            </div>
+        </li>
         {% endfor %}
     </ul>
 </body>

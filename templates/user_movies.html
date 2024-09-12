@@ -43,6 +43,7 @@
             <li>
                 <img src="{{ movie_poster }}" alt="Movie Poster">
                 <a href="/movies/{{ user_movie.movie_id}}"> {{ movie_name }} </a>
+                <p>User rating: {{user_movie.user_rating}}</p>
                
                 <form action="/users/{{ user_movie.user_id }}/update_movie/{{  user_movie.movie_id }}" method="GET">
                     <button type="submit">Edit</button>

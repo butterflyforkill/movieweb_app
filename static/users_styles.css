@@ -1,0 +1,121 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0; /* Light gray background */
+}
+  
+nav {
+    background-color: #fff; /* White background for navigation */
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Light gray border */
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    color: #333; /* Dark gray for heading */
+    border-bottom: 2px solid #90EE90; /* Green border */
+  }
+  
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+  
+nav li {
+    display: inline-block;
+}
+  
+nav a {
+    text-decoration: none;
+    color: #333; /* Dark gray for navigation links */
+    padding: 10px;
+}
+  
+nav a:hover {
+    background-color: #eee; /* Lighter gray on hover */
+}
+
+
+/* Styles for the users_container div */
+.users_container {
+    display: flex; /* Enable flexbox layout for the container */
+
+    flex-direction: column;
+    justify-content: space-between; /* Distribute items evenly */
+    background-color: #efe; /* Light pink background */
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners */
+}
+h2{
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    color: #333; /* Dark gray for heading */
+    border-top: 2px solid #90EE90; /* Green border */
+}
+/* Styles for the .users list (within the container) */
+/* Styles for the users_container div */
+.users_container {
+    display: flex; /* Enable flexbox layout for the container */
+    flex-wrap: wrap; /* Wrap list items if needed */
+    /* No background needed, as removed from .users */
+    padding: 10px; /* Adjust padding as needed */
+    border-radius: 5px; /* Rounded corners (optional) */
+}
+
+/* Styles for the .users list */
+.users {
+    list-style: none; /* Remove default list styles */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+/* Styles for user list items (now within <li>) */
+.users li {
+    display: flex; /* Enable flexbox layout for user information */
+    flex-direction: column; /* Arrange elements vertically */
+    align-items: center; /* Center elements horizontally */
+    padding: 5px 10px; /* Add some padding for spacing */
+    margin: 5px; /* Add some margin for spacing */
+    border: 1px solid #ddd; /* Add a thin border (optional) */
+    border-radius: 3px; /* Rounded corners for user info */
+    display: inline-block; /* Allow elements to fit next to each other */
+}
+
+/* Styles for user links */
+.users li a {
+    color: #333; /* Adjust text color as needed */
+    text-decoration: none; /* Remove underline */
+}
+
+.user-actions {
+    display: flex; /* Enable flexbox layout for actions */
+    flex-direction: column; /* Arrange actions vertically */
+    align-items: center; /* Center actions horizontally */
+    /* ... */
+}
+
+/* Styles for user action links */
+.user-actions a {
+    text-decoration: none; /* Remove underline */
+    /* ... */
+}
+
+.user-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333; /* Adjust color as needed */
+    background-color: #f2f2f2; /* Adjust background color as needed */
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center; /* Center the name within the div */
+    /* Add more styles as desired: */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    background-image: linear-gradient(to right, #bbb93c, #bb7c94); /* Add a gradient background */
+}
