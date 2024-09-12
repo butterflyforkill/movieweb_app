@@ -53,6 +53,23 @@ def user_movies(user_id):
         return handle_internal_server_error(e)
 
 
+@app.route('/users/<int:user_id>/sort', methods=['POST'])
+def movies_sort(user_id):
+    try:
+        watch_status = request.form.get('watch_status')
+        if watch_status:
+            movies = data_manager.get_movie_by_watch_status(user_id, watch_status)
+        else:
+            movies = data_manager.get_user_movies(user_id)
+
+        return render_template('user_movies.html', user_movies=movies)
+    except Exception as e:
+        # Handle the exception here
+        print(f"An error occurred: {e}")
+        flash("An error occurred while sorting movies.", "error")
+        return redirect(url_for('user_movies', user_id=user_id))
+
+
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':

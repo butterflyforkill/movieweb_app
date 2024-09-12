@@ -17,17 +17,26 @@
 
     <h2>List of the user's Movies</h2>
     
-    {% for message in get_flashed_messages() %}
-        {% if message.category == 'success' %}
-            <div class="flash-message success">
-                {{ message }}
-            </div>
-        {% elif message.category == 'error' %}
-            <div class="flash-message error">
-                {{ message }}
-            </div>
-        {% endif %}
-    {% endfor %}
+ 
+    <form action="/users/{{ user_movies[0][0].user_id }}/sort" method="POST">
+        <label for="watch_status">Filter by Watch Status:</label>
+        <select name="watch_status" id="watch_status">
+            <option value="">All</option>
+            <option value="watched">Watched</option>
+            <option value="watching">Watching</option>
+            <option value="wishlist">Wishlist</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for message in messages %}
+            <li class="flash-category">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     <ul>
         {% for user_movie, movie_name, movie_poster in user_movies %}
         

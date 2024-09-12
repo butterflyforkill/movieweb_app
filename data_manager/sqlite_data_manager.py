@@ -21,6 +21,10 @@ class SQLiteDataManager(DataManagerInterface):
     
     def get_movie_by_movie_by_user(self, movie_id, user_id):
         return self.db.session.query(UserMovie).filter(UserMovie.movie_id == movie_id, UserMovie.user_id == user_id).first()
+    
+    def get_movie_by_watch_status(self,user_id, watch_status):
+        return self.db.session.query(UserMovie, Movie.movie_name, Movie.movie_poster) \
+                .filter(UserMovie.user_id == user_id, UserMovie.watchlist_status == watch_status).join(Movie).all()
 
     def get_all_users(self):
         return self.db.session.query(User).all()
