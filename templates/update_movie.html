@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Update Movie - MovieWeb App</title>
+    <link rel="stylesheet" href="/static/add_movie_styles.css">
 </head>
 <body>
 
@@ -15,7 +16,7 @@
         </ul>
     </nav>
     <h2>Update Movie</h2>
-    <form method="POST">
+    <form class="movie-form" method="POST">
         <label for="rating">Rating:</label>
         <input type="number" id="rating" name="rating" value="{{ user_movie.user_rating }}">
         <br>

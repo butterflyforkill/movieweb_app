@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Add User - MovieWeb App</title>
+    <link rel="stylesheet" href="/static/add_user_styles.css">
 </head>
 <body>
     <h1>MovieWeb App</h1>
@@ -13,11 +14,13 @@
         </ul>
     </nav>
     <h2>Add User</h2>
+    <div class="user-form">
     <form method="POST" action="/add_user">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
 
         <button type="submit">Add User</button>
     </form>
+</div>
 </body>
 </html> 

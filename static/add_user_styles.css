@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url("./anime-style-clouds.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+  }
+  
+  h1 {
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    color: #270808; /* Dark gray for heading */
+    border-bottom: 2px solid #ee90d2; /* Green border */
+    font-size: 28px; /* Adjust font size as needed */
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.5); /* Light gray background with 80% opacity */
+    border-radius: 5px;
+  }
+  
+  h2 {
+    text-align: center;
+    padding: 10px 0;
+    margin: 0;
+    color: #333; /* Dark gray for subheading */
+  }
+  
+  nav {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Light gray border */
+  }
+  
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  nav li {
+    display: inline-block;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #333; /* Dark gray for navigation links */
+    padding: 10px;
+  }
+  
+  nav a:hover {
+    background-color: #eee; /* Lighter gray on hover */
+  }
+  h2{
+    text-align: center;
+    padding: 10px 0;
+    margin: 0;
+    color: #333; /* Dark gray for subheading */
+    background-color: rgba(255, 255, 255, 0.5); /* Light gray background with 80% opacity */
+  }
+
+  .user-form {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.5); /* Light gray background with 80% opacity */
+}
+
+.user-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.user-form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.user-form button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}

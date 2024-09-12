@@ -46,12 +46,15 @@
                 <div class="movie-card">
                     <img src="{{ movie_poster }}" alt="{{ movie_name }}">
                     <div class="movie-details">
-                        <h3 class="movie-title">{{ movie_name }}</h3>
+                        <h3 class="movie-title"><a href="/{{ user_movie.movie_id }}"> {{ movie_name }} </a></h3>
                         <p class="movie-rating">User Rating: {{ user_movie.user_rating }}</p>
                         <div class="movie-actions">
-                            <button class="edit-button">Edit</button>
-                            <button class="delete-button">Delete</button>
-                        </div>
+                            <form action="/users/{{ user_movie.user_id }}/update_movie/{{  user_movie.movie_id }}" method="GET" class="edit-button">
+                                <button class="edit-button" type="submit">Edit</button>
+                            </form>
+                            <form action="/users/{{ user_movie.user_id }}/delete_movie/{{  user_movie.movie_id }}" method="POST" class="delete-button">
+                                <button class="delete-button" type="submit">Delete</button>
+                            </form></div>
                     </div>
                 </div>
             </li>
